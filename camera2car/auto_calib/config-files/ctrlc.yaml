@@ -53,7 +53,7 @@ DEVICE: 'cuda'
 SEED: 42
 RESUME: 
 LOAD: 'logs/checkpoint.pth'
-MODE : train
+MODE : test
 START_EPOCH: 0
 VAL: False
 NUM_WORKERS: 12

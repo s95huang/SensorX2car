@@ -21,6 +21,7 @@ import util.misc as utils
 from datasets import build_image_dataset
 from models import build_model
 from config import cfg
+import time
 
 cmap = plt.get_cmap("jet")
 norm = mpl.colors.Normalize(vmin=0.0, vmax=1.0)
@@ -76,8 +77,15 @@ def main(cfg):
     
     for i, (samples, extra_samples, targets) in enumerate(tqdm(data_loader_test)):
         with torch.no_grad():
+            t1 = time.time()
+            # print(samples.shape)
+            print(samples.tensors.shape)
+            print(samples.mask.shape)
             samples = samples.to(device)
             extra_samples = to_device(extra_samples, device)
+            print(extra_samples['lines'].shape)
+            print(extra_samples['line_mask'].shape)
+
             outputs = model(samples, extra_samples)
                     
             pred_vp = outputs['pred_vp'].to('cpu')[0].numpy()
@@ -113,7 +121,7 @@ def main(cfg):
             print("filename: ", filename)
             print("VP: ({}, {})".format(pred_vp[0] + img_sz[1] / 2, pred_vp[1] + img_sz[0] / 2))
             print("HL angle: {} rad".format(pred_hl))
-                    
+            print("time per frame (s): ", time.time() - t1)                    
 
             
 if __name__ == '__main__':
